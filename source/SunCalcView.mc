@@ -38,7 +38,7 @@ class SunCalc {
 
     var lastD, lastLng;
     var	n, ds, M, sinM, C, L, sin2L, dec, Jnoon, EoT, LST, altAz, sunriseAz, transitAlt, sunsetAz, 
-        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad;
+        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC;
 
     function initialize() {
         lastD = null;
@@ -100,7 +100,8 @@ class SunCalc {
             var GMT = localMoment.getOffset().toFloat() / 3600;
             var LT = info.hour.toFloat() + info.min.toFloat() / 60 + info.sec.toFloat() / 3600; 
 
-            LST = LT - GMT + lng.toFloat() * 180 / Math.PI / 15 - EoT.toFloat() / 60;
+            LC = GMT - lng.toFloat() * 180 / Math.PI / 15;
+            LST = LT - LC - EoT.toFloat() / 60;
 
             if (LST < 0) {
                 LST += 24;
@@ -181,6 +182,25 @@ class SunCalc {
 
         return fromJulian(Jrise);
     }
+
+        function lcToString(LC) {          
+        var LCString = "";
+
+        if (LC < 0) {
+            LCString = "-";
+            LC *= -1;
+        }
+        LC *= 60;
+
+        var LCM = Math.floor(LC).toNumber();
+        var LCS = Math.round(((LC - LCM) * 60).toNumber()).format("%02d");
+
+        LCString += LCM;
+        LCString += ":";
+        LCString += LCS;
+
+        return LCString;
+        }
 
     function eotToString(EoT) {          
         var EoTString = "";

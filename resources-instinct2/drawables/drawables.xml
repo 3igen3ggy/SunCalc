@@ -1,7 +1,7 @@
 <drawables>
 		<drawable-list id="Arrow_updown">
-			<shape type="polygon" points="[[13,114], [2,124], [24,124]]" color="Gfx.COLOR_BLACK" />
-			<shape type="polygon" points="[[13,142], [2,132], [24,132]]" color="Gfx.COLOR_BLACK" />
+			<shape type="polygon" points="[[13,107], [2,117], [24,117]]" color="Gfx.COLOR_BLACK" />
+			<shape type="polygon" points="[[13,130], [2,120], [24,120]]" color="Gfx.COLOR_BLACK" />
 		</drawable-list>
 		<drawable-list id="Arrow_right">
 			<shape type="polygon" points="[[163,70], [173,80], [163,90]]" color="Gfx.COLOR_BLACK" />

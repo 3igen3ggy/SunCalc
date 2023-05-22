@@ -257,6 +257,9 @@ class SunCalcView extends Ui.View {
         findDrawableById("LST").setText(sc.LSTh.toNumber().format("%02d") + ":" + sc.LSTm.toNumber().format("%02d") + ":" 
         + Math.round(sc.LSTs.toNumber()).format("%02d"));
 
+        findDrawableById("LCTitle").setText("LC");
+        findDrawableById("LC").setText(sc.lcToString(sc.LC));
+
         if (sc.sunriseAz == null) {
             findDrawableById("Sunrise").setText("/\\" + "--°");
         } else {

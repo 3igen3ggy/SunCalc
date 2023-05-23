@@ -160,10 +160,8 @@ class SunCalc {
                 sunriseAz *= 180 / Math.PI;
                 sunsetAz = 360 - sunriseAz;
             }
-            
-            var today = Gregorian.utcInfo(Time.now(), Time.FORMAT_SHORT);
-            MAzAlt = astro.LunarAzEl(today.year, today.month, today.day, today.hour, today.min, today.sec, pos[0] * 180 / Math.PI, pos[1] * 180 / Math.PI, 0);
-            System.println("az: " + MAzAlt[0] + ", alt: " + MAzAlt[1]);
+    
+            MAzAlt = astro.LunarAzEl(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec, pos[0] * 180 / Math.PI, pos[1] * 180 / Math.PI, 0);
         }
 
         if (what == NOON) {

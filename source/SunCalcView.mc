@@ -3,6 +3,7 @@ using Toybox.Time as Time;
 using Toybox.Position as Pos;
 using Toybox.System;
 using Toybox.Time.Gregorian;
+using Astro as astro;
 
 class SunCalc {
 
@@ -38,7 +39,7 @@ class SunCalc {
 
     var lastD, lastLng;
     var	n, ds, M, sinM, C, L, sin2L, dec, Jnoon, EoT, LST, altAz, sunriseAz, transitAlt, sunsetAz, 
-        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC;
+        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt;
 
     function initialize() {
         lastD = null;
@@ -159,6 +160,10 @@ class SunCalc {
                 sunriseAz *= 180 / Math.PI;
                 sunsetAz = 360 - sunriseAz;
             }
+            
+            var today = Gregorian.utcInfo(Time.now(), Time.FORMAT_SHORT);
+            MAzAlt = astro.LunarAzEl(today.year, today.month, today.day, today.hour, today.min, today.sec, pos[0] * 180 / Math.PI, pos[1] * 180 / Math.PI, 0);
+            System.println("az: " + MAzAlt[0] + ", alt: " + MAzAlt[1]);
         }
 
         if (what == NOON) {

@@ -9,6 +9,7 @@ class SunCalc {
 
     hidden const PI   = Math.PI,
         RAD  = Math.PI / 180.0,
+        ANG = 180.0 / Math.PI,
         PI2  = Math.PI * 2.0,
         DAYS = Time.Gregorian.SECONDS_PER_DAY,
         J1970 = 2440588,
@@ -39,7 +40,7 @@ class SunCalc {
 
     var lastD, lastLng;
     var	n, ds, M, sinM, C, L, sin2L, dec, Jnoon, EoT, LST, altAz, sunriseAz, transitAlt, sunsetAz, 
-        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt;
+        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt, aTransitAlt;
 
     function initialize() {
         lastD = null;
@@ -56,6 +57,14 @@ class SunCalc {
         } else {
             return (a - 0.5).toNumber().toFloat();
         }
+    }
+
+    function rounder(a, dec) {
+        var pow = Math.pow(10, dec);
+        a *= pow;
+        a = Math.round(a);
+        a /= pow;
+        return a;
     }
 
     // lat and lng in radians
@@ -101,7 +110,7 @@ class SunCalc {
             var GMT = localMoment.getOffset().toFloat() / 3600;
             var LT = info.hour.toFloat() + info.min.toFloat() / 60 + info.sec.toFloat() / 3600; 
 
-            LC = GMT - lng.toFloat() * 180 / Math.PI / 15;
+            LC = GMT - lng.toFloat() * ANG / 15;
             LST = LT - LC - EoT.toFloat() / 60;
 
             if (LST < 0) {
@@ -116,7 +125,7 @@ class SunCalc {
 
             altRad = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(hourAngle));
             
-            var alt = altRad * 180 / Math.PI;
+            var alt = altRad * ANG;
 
             // var azRad = Math.asin(-Math.sin(hourAngle) * Math.cos(dec) / Math.cos(altRad));
 
@@ -130,12 +139,15 @@ class SunCalc {
                 azRad += 2 * Math.PI ;
             }
 
-            var az = azRad * 180 / Math.PI;
+            var az = azRad * ANG;
 
             altAz = [alt, az];
 
-            transitAlt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec)) * 180 / Math.PI;
+            //transitAlt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec)) * ANG;
             //var sunriseSunsetHourAngle = Math.acos(-Math.tan(lat) * Math.tan(dec)); 
+
+            transitAlt = 90 - (lat - dec) * ANG;
+            aTransitAlt = -90 + (lat + dec) * ANG;
 
             var cosSunriseSunsetHourAngle = (Math.sin(-0.833 * RAD) - Math.sin(lat) * Math.sin(dec))
             / (Math.cos(lat) * Math.cos(dec));
@@ -157,11 +169,11 @@ class SunCalc {
                 sunsetAz = null;
             } else {
                 sunriseAz = Math.acos(cosSunriseAz);
-                sunriseAz *= 180 / Math.PI;
+                sunriseAz *= ANG;
                 sunsetAz = 360 - sunriseAz;
             }
     
-            MAzAlt = astro.LunarAzEl(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec, pos[0] * 180 / Math.PI, pos[1] * 180 / Math.PI, 0);
+            MAzAlt = astro.LunarAzEl(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec, pos[0] * ANG, pos[1] * ANG, 0);
         }
 
         if (what == NOON) {

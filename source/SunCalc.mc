@@ -248,9 +248,9 @@ class SunCalcView extends Ui.View {
         findDrawableById("DecTitle").setText("δ");
         findDrawableById("Dec").setText(decFormatted.format("%.2f") + "°");
         findDrawableById("AltTitle").setText("alt");
-        findDrawableById("Alt").setText(sc.altAz[0].format("%.2f") + "°");
+        findDrawableById("Alt").setText(sc.altAz[0].format("%.1f") + "°");
         findDrawableById("AzTitle").setText("Az");
-        findDrawableById("Az").setText(sc.altAz[1].format("%.2f") + "°");
+        findDrawableById("Az").setText(sc.altAz[1].format("%.1f") + "°");
 
         findDrawableById("EoT").setText(sc.eotToString(sc.EoT));
         findDrawableById("LC").setText(sc.lcToString(sc.LC));
@@ -258,22 +258,23 @@ class SunCalcView extends Ui.View {
         findDrawableById("LST").setText(sc.LSTh.toNumber().format("%02d") + ":" + sc.LSTm.toNumber().format("%02d") + ":" 
         + Math.round(sc.LSTs.toNumber()).format("%02d"));
 
-        findDrawableById("MAz").setText(sc.MAzAlt[0].format("%.2f") + "°");
-        findDrawableById("MAlt").setText(sc.MAzAlt[1].format("%.2f") + "°");
+        findDrawableById("MAz").setText(sc.MAzAlt[0].format("%.1f") + "°");
+        findDrawableById("MAlt").setText(sc.MAzAlt[1].format("%.1f") + "°");
 
         if (sc.sunriseAz == null) {
             findDrawableById("Sunrise").setText("/\\" + "--°");
         } else {
-            findDrawableById("Sunrise").setText("/\\" + Math.round(sc.sunriseAz).toNumber() + "°");
+            findDrawableById("Sunrise").setText("/\\" + sc.rounder(sc.sunriseAz, 1).format("%.1f") + "°");
         }
 
         if (sc.sunsetAz == null) {
             findDrawableById("Sunset").setText("\\/" + "--°");
         } else {
-            findDrawableById("Sunset").setText("\\/" + Math.round(sc.sunsetAz).toNumber() + "°");
+            findDrawableById("Sunset").setText("\\/" + sc.rounder(sc.sunsetAz, 1).format("%.1f") + "°");
         }
-        findDrawableById("Transit").setText("^" + Math.round(sc.transitAlt).toNumber() + "°");
-
+        findDrawableById("Transit").setText("^" + sc.rounder(sc.transitAlt, 1).format("%.1f") + "°");
+        findDrawableById("ATransit").setText(sc.rounder(sc.aTransitAlt, 1).format("%.1f") + "°");
+        
         Ui.requestUpdate();
     }
 

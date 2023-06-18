@@ -40,7 +40,8 @@ class SunCalc {
 
     var lastD, lastLng;
     var	n, ds, M, sinM, C, L, sin2L, dec, Jnoon, EoT, LST, altAz, sunriseAz, transitAlt, sunsetAz, 
-        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt, aTransitAlt;
+        LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt, aTransitAlt, 
+        GSMT, LSMT, LSMTh, LSMTm, LSMTs;
 
     function initialize() {
         lastD = null;
@@ -121,6 +122,16 @@ class SunCalc {
             LSTm = ((LST - LSTh) * 60).toNumber();
             LSTs = round((((LST - LSTh) * 60) - LSTm) * 60);
 
+            var T = (d / 36525);
+
+            GSMT = 280.46061837d + 360.98564736629d * d + (0.000387933d * T * T) - (T * T * T / 38710000.0d); 
+            
+            GSMT = mod(GSMT, 360);
+            LSMT = (GSMT + lng.toFloat() * ANG)/ 15;
+            LSMTh = LSMT.toNumber();
+            LSMTm = ((LSMT - LSMTh) * 60).toNumber();
+            LSMTs = round((((LSMT - LSMTh) * 60) - LSMTm) * 60);
+
             var hourAngle = (LST * 15 - 180) * Math.PI / 180;
 
             altRad = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(hourAngle));
@@ -146,8 +157,17 @@ class SunCalc {
             //transitAlt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec)) * ANG;
             //var sunriseSunsetHourAngle = Math.acos(-Math.tan(lat) * Math.tan(dec)); 
 
-            transitAlt = 90 - (lat - dec) * ANG;
-            aTransitAlt = -90 + (lat + dec) * ANG;
+            if (lat >= dec) {
+                transitAlt = 90 + (dec - lat) * ANG;
+            } else {
+                transitAlt = 90 + (lat - dec) * ANG;
+            }
+
+            if (lat < -dec) {
+                aTransitAlt = -90 - (lat + dec) * ANG;
+            } else {
+                aTransitAlt = -90 + (lat + dec) * ANG;
+            }
 
             var cosSunriseSunsetHourAngle = (Math.sin(-0.833 * RAD) - Math.sin(lat) * Math.sin(dec))
             / (Math.cos(lat) * Math.cos(dec));
@@ -298,6 +318,10 @@ class SunCalc {
         var info = Time.Gregorian.info(moment, Time.FORMAT_SHORT);
         return info.day.format("%02d") + "." + info.month.format("%02d") + "." + info.year.toString()
             + " " + info.hour.format("%02d") + ":" + info.min.format("%02d") + ":" + info.sec.format("%02d");
+    }
+
+    static function mod(a, d) {
+        return (a - d * Math.floor(a/d));
     }
 
     (:test) static function testCalc(logger) {

@@ -275,6 +275,10 @@ class SunCalcView extends Ui.View {
         findDrawableById("Transit").setText("^" + sc.rounder(sc.transitAlt, 1).format("%.1f") + "°");
         findDrawableById("ATransit").setText(sc.rounder(sc.aTransitAlt, 1).format("%.1f") + "°");
         
+        findDrawableById("LSMTTitle").setText("L*T");
+        findDrawableById("LSMT").setText(sc.LSMTh.toNumber().format("%02d") + ":" + sc.LSMTm.toNumber().format("%02d") + ":" 
+        + Math.round(sc.LSMTs.toNumber()).format("%02d"));
+
         Ui.requestUpdate();
     }
 

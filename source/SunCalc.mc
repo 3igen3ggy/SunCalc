@@ -260,6 +260,11 @@ class SunCalcView extends Ui.View {
 
         findDrawableById("MAz").setText(sc.MAzAlt[0].format("%.1f") + "°");
         findDrawableById("MAlt").setText(sc.MAzAlt[1].format("%.1f") + "°");
+        if (sc.MIl[1] > 99.99) {
+            findDrawableById("MIl").setText("100%");
+        } else {
+            findDrawableById("MIl").setText(sc.MIl[1].format("%.2f") + "%");
+        }
 
         if (sc.sunriseAz == null) {
             findDrawableById("Sunrise").setText("/\\" + "--°");

@@ -4,6 +4,7 @@ using Toybox.Position as Pos;
 using Toybox.System;
 using Toybox.Time.Gregorian;
 using Astro as astro;
+using Phase as phase;
 
 class SunCalc {
 
@@ -41,7 +42,7 @@ class SunCalc {
     var lastD, lastLng;
     var	n, ds, M, sinM, C, L, sin2L, dec, Jnoon, EoT, LST, altAz, sunriseAz, transitAlt, sunsetAz, 
         LSTh, LSTm, LSTs, sunriseSunsetHourAngle, cosSunriseAz, altRad, LC, MAzAlt, aTransitAlt, 
-        GSMT, LSMT, LSMTh, LSMTm, LSMTs;
+        GSMT, LSMT, LSMTh, LSMTm, LSMTs, MIl;
 
     function initialize() {
         lastD = null;
@@ -194,6 +195,7 @@ class SunCalc {
             }
     
             MAzAlt = astro.LunarAzEl(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec, pos[0] * ANG, pos[1] * ANG, 0);
+            MIl = phase.getPhase(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec);
         }
 
         if (what == NOON) {

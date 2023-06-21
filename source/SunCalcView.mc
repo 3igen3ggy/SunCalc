@@ -4,7 +4,6 @@ using Toybox.Position as Pos;
 using Toybox.System;
 using Toybox.Time.Gregorian;
 using Astro as astro;
-using Phase as phase;
 
 class SunCalc {
 
@@ -195,7 +194,11 @@ class SunCalc {
             }
     
             MAzAlt = astro.LunarAzEl(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec, pos[0] * ANG, pos[1] * ANG, 0);
-            MIl = phase.getPhase(info.year, info.month, info.day, info.hour - GMT, info.min, info.sec);
+            var MAzRad = MAzAlt[0] * RAD;
+            var MAltRad = MAzAlt[1] * RAD;
+            var cosSeparation = Math.sin(MAltRad) * Math.sin(altRad) + Math.cos(MAltRad) * Math.cos(altRad) * Math.cos(MAzRad - azRad);
+            MIl = (1 - cosSeparation) / 2.0 * 100;
+            MIl = rounder(MIl, 1);
         }
 
         if (what == NOON) {

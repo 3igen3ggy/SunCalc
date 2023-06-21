@@ -384,11 +384,11 @@ const MYPI = 3.14159265358979323846d;
             }
 
             //Apply PaRAlax Correction if we are still on earth
-            if (Alt < 100){
-                var horParal = 8.794d/(r*6379.14d/149.59787e6);
-                var p = Math.asin(Math.cos(h * MYPI /180.0d)*Math.sin((horParal/3600.0d) * MYPI /180.0d)) * (180 / MYPI );
-                h = h-p;
-            }
+            // if (Alt < 100){
+            //     var horParal = 8.794d/(r*6379.14d/149.59787e6);
+            //     var p = Math.asin(Math.cos(h * MYPI /180.0d)*Math.sin((horParal/3600.0d) * MYPI /180.0d)) * (180 / MYPI );
+            //     h = h-p;
+            // }
             return [Az, h];
         }
 

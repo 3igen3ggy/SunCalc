@@ -14,7 +14,8 @@ class SunCalc {
         DAYS = Time.Gregorian.SECONDS_PER_DAY,
         J1970 = 2440588,
         J2000 = 2451545,
-        J0 = 0.0009;
+        J0 = 0.0009,
+        hSunBelow = -0.833; //for sunrise/sunset
 
     hidden const TIMES = [
         -18 * RAD,    // ASTRO_DAWN
@@ -169,22 +170,9 @@ class SunCalc {
                 aTransitAlt = -90 + (lat + dec) * ANG;
             }
 
-            var cosSunriseSunsetHourAngle = (Math.sin(-0.833 * RAD) - Math.sin(lat) * Math.sin(dec))
-            / (Math.cos(lat) * Math.cos(dec));
+            cosSunriseAz = (Math.sin(dec) - Math.sin(lat) * Math.sin(hSunBelow * RAD) ) / (Math.cos(lat) * Math.cos(hSunBelow * RAD));
 
-            if (cosSunriseSunsetHourAngle < -1 || cosSunriseSunsetHourAngle > 1) {
-                sunriseSunsetHourAngle = null;
-            } else {
-                sunriseSunsetHourAngle = Math.acos(cosSunriseSunsetHourAngle); 
-            }
-
-            if (sunriseSunsetHourAngle == null) {
-                cosSunriseAz = null;
-            } else {
-                cosSunriseAz = Math.sin(dec) * Math.cos(lat) - Math.sin(lat) * Math.cos(sunriseSunsetHourAngle) * Math.cos(dec);
-            }
-
-            if (cosSunriseAz == null) {
+            if (cosSunriseAz == null || cosSunriseAz < -1 || cosSunriseAz > 1) {
                 sunriseAz = null;
                 sunsetAz = null;
             } else {

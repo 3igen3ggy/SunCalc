@@ -129,6 +129,7 @@ class SunCalc {
             
             GSMT = mod(GSMT, 360);
             LSMT = (GSMT + lng.toFloat() * ANG)/ 15;
+            LSMT = mod(LSMT, 24);
             LSMTh = LSMT.toNumber();
             LSMTm = ((LSMT - LSMTh) * 60).toNumber();
             LSMTs = round((((LSMT - LSMTh) * 60) - LSMTm) * 60);
@@ -158,17 +159,8 @@ class SunCalc {
             //transitAlt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec)) * ANG;
             //var sunriseSunsetHourAngle = Math.acos(-Math.tan(lat) * Math.tan(dec)); 
 
-            if (lat >= dec) {
-                transitAlt = 90 + (dec - lat) * ANG;
-            } else {
-                transitAlt = 90 + (lat - dec) * ANG;
-            }
-
-            if (lat < -dec) {
-                aTransitAlt = -90 - (lat + dec) * ANG;
-            } else {
-                aTransitAlt = -90 + (lat + dec) * ANG;
-            }
+            transitAlt = 90 - (dec - lat).abs() * ANG;
+            aTransitAlt = -90 + (lat + dec).abs() * ANG;
 
             cosSunriseAz = (Math.sin(dec) - Math.sin(lat) * Math.sin(hSunBelow * RAD) ) / (Math.cos(lat) * Math.cos(hSunBelow * RAD));
 

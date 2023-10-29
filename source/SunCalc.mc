@@ -254,6 +254,7 @@ class SunCalcView extends Ui.View {
 
         findDrawableById("EoT").setText(sc.eotToString(sc.EoT));
         findDrawableById("LC").setText(sc.lcToString(sc.LC));
+        //local solar time
         findDrawableById("LSTTitle").setText("LST");
         findDrawableById("LST").setText(sc.LSTh.toNumber().format("%02d") + ":" + sc.LSTm.toNumber().format("%02d") + ":" 
         + Math.round(sc.LSTs.toNumber()).format("%02d"));
@@ -279,7 +280,7 @@ class SunCalcView extends Ui.View {
         }
         findDrawableById("Transit").setText("^" + sc.rounder(sc.transitAlt, 1).format("%.1f") + "°");
         findDrawableById("ATransit").setText(sc.rounder(sc.aTransitAlt, 1).format("%.1f") + "°");
-        
+        //local sidereal time
         findDrawableById("LSMTTitle").setText("L*T");
         findDrawableById("LSMT").setText(sc.LSMTh.toNumber().format("%02d") + ":" + sc.LSMTm.toNumber().format("%02d") + ":" 
         + Math.round(sc.LSMTs.toNumber()).format("%02d"));
